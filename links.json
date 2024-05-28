@@ -1,0 +1,21 @@
+{
+  "links": [
+    {
+      "name": "Laptops",
+      "url": "https://www.amazon.com.tr/s?i=computers&rh=n%3A12601898031&fs=true&page=1&qid=1716849414&ref=sr_pg_2",
+      "maxNumberOfPages": 10
+    },
+    {
+      "name": "Monitors",
+      "url": "https://www.amazon.com.tr/s?i=computers&rh=n%3A12601904031&fs=true&page=1&qid=1716889704&ref=sr_pg_2",
+      "maxNumberOfPages": 25 
+    },
+    {
+      "name": "Graphics Cards",
+      "url": "https://www.amazon.com.tr/s?i=computers&rh=n%3A12601951031&fs=true&page=1&qid=1716890685&ref=sr_pg_2",
+      "maxNumberOfPages": 10
+    }
+  ]
+
+
+}

@@ -1,0 +1,26 @@
+Completed 1- A config file will be created.
+Completed 2- The link of the page containing all the products will be entered into this config file. By using the page variable in this link, access to all pages will be provided.
+Completed 3- The number of pages of all products will be entered so that it can be used in the for loop.
+https://www.amazon.com.tr/s?i=computers&rh=n%3A12601898031&fs=true&page=-------------&qid=1716842566&ref=sr_pg_2
+Completed 4- The only thing to be taken from each page is the link of each product.
+Completed 5- Product links will be stored as a feature in a dataset.
+6- After this process is completed, the second stage will begin.
+7- The data to be extracted by entering the page of each product:
+    Product name
+    Product image links
+    Product price
+    Stock
+    About the product
+    Product details
+    Product brand
+    Product seller
+    Number of 5-star ratings
+    Number of 4-star ratings
+    Number of 3-star ratings
+    Number of 2-star ratings
+    Number of 1-star ratings
+    Number of reviews
+
+8- We can access all reviews of the product by entering the product code found in the product's link into the parameter of the link
+https://www.amazon.com.tr/product-reviews/--------.
+9- Product reviews will be stored in another dataset.
