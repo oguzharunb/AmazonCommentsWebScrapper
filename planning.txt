@@ -4,8 +4,8 @@ Completed 3- The number of pages of all products will be entered so that it can 
 https://www.amazon.com.tr/s?i=computers&rh=n%3A12601898031&fs=true&page=-------------&qid=1716842566&ref=sr_pg_2
 Completed 4- The only thing to be taken from each page is the link of each product.
 Completed 5- Product links will be stored as a feature in a dataset.
-6- After this process is completed, the second stage will begin.
-7- The data to be extracted by entering the page of each product:
+Completed 6- After this process is completed, the second stage will begin.
+Completed 7- The data to be extracted by entering the page of each product:
     Product name
     Product image links
     Product price
@@ -21,6 +21,6 @@ Completed 5- Product links will be stored as a feature in a dataset.
     Number of 1-star ratings
     Number of reviews
 
-8- We can access all reviews of the product by entering the product code found in the product's link into the parameter of the link
+Completed 8- We can access all reviews of the product by entering the product code found in the product's link into the parameter of the link
 https://www.amazon.com.tr/product-reviews/--------.
-9- Product reviews will be stored in another dataset.
+Completed 9- Product reviews will be stored in another dataset.
