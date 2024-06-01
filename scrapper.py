@@ -27,7 +27,7 @@ def PullProductURLsFromSpecificCategory(input_url:str, custom_headers: str, page
     for x in range(1, page_number + 1):
         #pulling data from the page
         cont = requests.get(input_url, headers=custom_headers)
-        cont.encoding = 'utf-8'
+        cont.encoding = 'latin-1'
         content = cont.content
 
         #parsing the content of the page with beautifulsoup
@@ -73,7 +73,7 @@ def PullDataFromSpecificProductsReviews(productID: str, custom_headers: dict) ->
         #access the page of the reviews
         reviewLink = f'https://www.amazon.com.tr/product-reviews/{productID}/?pageNumber={pageNumber}'
         reviewPage = requests.get(reviewLink, headers=custom_headers)
-        reviewPage.encoding = 'utf-8'
+        reviewPage.encoding = 'latin-1'
         reviewContent = reviewPage.content
         soupReviewPage = bs.BeautifulSoup(reviewContent, 'lxml')
         #if there are no reviews on the page, break the loop
@@ -125,7 +125,7 @@ def PullDataFromSpecificProduct(url: str, custom_headers: str, writeToFile=False
     print("Fetching the data of the product...")
     cont = requests.get('https://amazon.com.tr'+url, headers=custom_headers)
     #encoding the content of the page for turkich characters
-    cont.encoding = 'utf-8'
+    cont.encoding = 'latin-1'
     content = cont.content
 
     #parsing the content of the page with beautifulsoup
@@ -140,6 +140,7 @@ def PullDataFromSpecificProduct(url: str, custom_headers: str, writeToFile=False
     print(f"All data of the product {productID} is fetched.")
     print("Fetching the reviews of the product...")
     ProductReviews = PullDataFromSpecificProductsReviews(productID, custom_headers)
+    print(ProductReviews)
     print(f"All reviews of the product {productID} are fetched.")
 
 
