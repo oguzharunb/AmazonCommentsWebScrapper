@@ -170,7 +170,7 @@ def PullAllProductsFromSpecificCategory(category_url: str, custom_headers: dict,
     AllProducts = []
     ProductCounter = 0
     for ProductURL in AllProductURLs:
-        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, True))
+        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, writeToFile=writeToFile))
         ProductCounter += 1
         print(f'{ProductCounter} product fetched from this category.')
     if writeToFile:
