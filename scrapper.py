@@ -34,12 +34,12 @@ def PullProductURLsFromSpecificCategory(input_url:str, custom_headers: str, page
         soup = bs.BeautifulSoup(content, 'lxml')
 
         #finding the divs that contain the products on the page of specific category by class name
-        box = soup.find_all('div', class_='a-section a-spacing-small puis-padding-left-small puis-padding-right-small')
-
+        box = soup.find_all('div', class_='sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
         #looping through the divs to get the links of the products by class name
         for i in box:
-            productLink = i.find('a', class_='a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal')['href']
-            
+            #productLink = i.find('a', class_'a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal')['href']
+            productLink = i.find('a', class_='a-link-normal s-no-outline')['href']
+            print(productLink)
             #checking if the link is a product link or not
             if productLink[0:5] == '/sspa':
                 continue
@@ -89,14 +89,14 @@ def PullDataFromSpecificProductsReviews(productID: str, custom_headers: dict) ->
         #ReviewsEachPage = soupReviewPage.find_all('div', class_='a-section celwidget')
         ReviewsEachPage = soupReviewPage.find_all('div', class_='a-section celwidget', id=lambda x: x and x.startswith('customer_review-'))  
         for review in ReviewsEachPage:
-            reviewText = review.find('span', class_='a-size-base review-text review-text-content').text
-            reviewRating = review.find('span', class_='a-icon-alt').text
+            reviewText = review.find('span', class_='a-size-base review-text review-text-content').text.strip('\n')
+            reviewRating = int(review.find('span', class_='a-icon-alt').text.split(' ')[-1][0])
             reviewTitle = review.find('a', class_='a-size-base a-link-normal review-title a-color-base review-title-content a-text-bold')
             if reviewTitle:
-                reviewTitle = reviewTitle.text
+                reviewTitle = reviewTitle.text.split('\n')[1]
             else:
                 reviewTitle = 'No Title'
-            AllReviews.append({'Review': reviewText, 'Rating': reviewRating, 'Title': reviewTitle})
+            AllReviews.append({'ReviewText': reviewText, 'ReviewRating': reviewRating, 'ReviewTitle': reviewTitle})
         pageNumber += 1
     return AllReviews
     
@@ -132,14 +132,27 @@ def PullDataFromSpecificProduct(url: str, custom_headers: str, writeToFile=False
     soup = bs.BeautifulSoup(content, 'lxml')
     
     productURL = url
-    productTitle = soup.find('span', class_='a-size-large product-title-word-break').text
-    productPrice = soup.find('span', class_='a-price-whole').text
-    productRating = soup.find('span', class_='a-icon-alt').text
-    productReviewNumber = soup.find('span', class_='a-size-base').text
+
+    productTitle = soup.find('span', class_='a-size-large product-title-word-break')
+    if productTitle:
+        productTitle = productTitle.text.strip()
+    productPrice = soup.find('span', class_='a-price-whole')
+    if productPrice:
+        productPrice = productPrice.text[:-1]
+    productRating = soup.find('span', class_='a-icon-alt')
+    if productRating:
+        productRating = productRating.text.split(' ')[-1]
+    #  <a id="acrCustomerReviewLink" class="a-link-normal" href="#customerReviews"> <span id="acrCustomerReviewText" class="a-size-base">17 değerlendirme</span> </a> 
+    productReviewNumber = soup.find('a', id='acrCustomerReviewLink')
+    if productReviewNumber:
+        productReviewNumber = productReviewNumber.text
     productID = url.split('/')[-2]
     print(f"All data of the product {productID} is fetched.")
     print("Fetching the reviews of the product...")
-    ProductReviews = PullDataFromSpecificProductsReviews(productID, custom_headers)
+    if productReviewNumber:
+        ProductReviews = PullDataFromSpecificProductsReviews(productID, custom_headers)
+    else:
+        ProductReviews = []
     print(ProductReviews)
     print(f"All reviews of the product {productID} are fetched.")
 
@@ -147,7 +160,7 @@ def PullDataFromSpecificProduct(url: str, custom_headers: str, writeToFile=False
     #writing the product data to a file
     if writeToFile:
         with open(f'{productID}.json', 'w') as file:
-            json.dump({'Product Title': productTitle, 'Product Price': productPrice, 'Product Rating': productRating, 'Product Review Number': productReviewNumber, 'Product Reviews': ProductReviews}, file)
+            json.dump({'Product Title': productTitle, 'Product Price': productPrice, 'Product Rating': productRating, 'Product Review Number': productReviewNumber, 'Product Reviews': ProductReviews}, file, ensure_ascii=False, indent=4)
 
     return {'Product Title': productTitle, 'Product Price': productPrice, 'Product Rating': productRating, 'Product Review Number': productReviewNumber, 'Product Reviews': ProductReviews}
 
@@ -157,7 +170,7 @@ def PullAllProductsFromSpecificCategory(category_url: str, custom_headers: dict,
     AllProducts = []
     ProductCounter = 0
     for ProductURL in AllProductURLs:
-        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, writeToFile))
+        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, True))
         ProductCounter += 1
         print(f'{ProductCounter} product fetched from this category.')
     if writeToFile:
@@ -169,4 +182,4 @@ for category in urls:
     Products = PullAllProductsFromSpecificCategory(category['url'], custom_headers, category['maxNumberOfPages'], category_name=category['name'], writeToFile=False)
     #write the data of the products to a file
     with open(f'{category["name"]}.json', 'w') as file:
-        json.dump(Products, file)
+        json.dump(Products, file, ensure_ascii=False, indent=4)
