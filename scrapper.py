@@ -34,7 +34,7 @@ def PullProductURLsFromSpecificCategory(input_url:str, custom_headers: str, page
         soup = bs.BeautifulSoup(content, 'lxml')
 
         #finding the divs that contain the products on the page of specific category by class name
-        box = soup.find_all('div', class_='puis-card-container s-card-container s-overflow-hidden aok-relative puis-expand-height puis-include-content-margin puis puis-v1102xfiy6gme925w67f1x0fa3d s-latency-cf-section puis-card-border')
+        box = soup.find_all('div', class_='a-section a-spacing-small puis-padding-left-small puis-padding-right-small')
 
         #looping through the divs to get the links of the products by class name
         for i in box:
