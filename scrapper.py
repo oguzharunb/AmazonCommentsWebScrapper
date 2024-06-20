@@ -86,7 +86,6 @@ def PullDataFromSpecificProductsReviews(productID: str, custom_headers: dict) ->
         #3 features of the review: review text, review rating, review title
 
         #id should containd customer_review-XXXXXXXXXX
-        #ReviewsEachPage = soupReviewPage.find_all('div', class_='a-section celwidget')
         ReviewsEachPage = soupReviewPage.find_all('div', class_='a-section celwidget', id=lambda x: x and x.startswith('customer_review-'))  
         for review in ReviewsEachPage:
             reviewText = review.find('span', class_='a-size-base review-text review-text-content').text.strip('\n')
@@ -100,26 +99,6 @@ def PullDataFromSpecificProductsReviews(productID: str, custom_headers: dict) ->
         pageNumber += 1
     return AllReviews
     
-    ####reviewNumber = int(reviewNumberString.split(' ')[-2])
-    #getting the number of reviews of the product to loop through the pages of the reviews (no need)
-    ####reviewNumberString = soupReviewPage.find('div', class_='a-row a-spacing-base a-size-base').text
-    ####reviewNumberString = reviewNumberString.strip()
-    #output: XXX toplam puan, XXX yorumlu
-    
-    ####reviewPage = requests.get('https://amazon.com.tr' + reviewLink + '&pageNumber=' + str(page), headers=custom_headers)
-    
-    #writing the reviews to a file
-    ####with open(f'{productID}.json', 'w') as file:
-    ####    json.dump(AllReviews, file)
-    
-    ####for page in range(1, reviewNumber // 10 + 1):
-    ####    #getting the reviews of the product
-    ####    reviewPage = requests.get('https://amazon.com.tr' + reviewLink + '&pageNumber=' + str(page), headers=custom_headers)
-    ####    reviewContent = reviewPage.content
-    ####    soupReviewPage = bs.BeautifulSoup(reviewContent, 'lxml')
-    ####for category in urls:
-    ####   PullDataFromSpecificPage(category['url'] , custom_headers, category['maxNumberOfPages'], f"{category['name']}.json")
-
 def PullDataFromSpecificProduct(url: str, custom_headers: str, writeToFile=False) -> list:
     #pulling data from the page
     print("Fetching the data of the product...")
@@ -170,7 +149,7 @@ def PullAllProductsFromSpecificCategory(category_url: str, custom_headers: dict,
     AllProducts = []
     ProductCounter = 0
     for ProductURL in AllProductURLs:
-        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, writeToFile=writeToFile))
+        AllProducts.append(PullDataFromSpecificProduct(ProductURL, custom_headers, writeToFile=True))
         ProductCounter += 1
         print(f'{ProductCounter} product fetched from this category.')
     if writeToFile:
